@@ -48,10 +48,6 @@ export async function executeAgentPipeline(userPrompt, settings, stApi) {
           usage: response.usage,
         };
 
-        if (settings.showInChat) {
-          injectResultIntoChat(result);
-        }
-
         if (debug) console.log(`[${MODULE_NAME}] Agent 完成，共 ${iteration} 次迭代。`);
         return result;
       }
@@ -171,19 +167,3 @@ function showRunningIndicator(show) {
   }
 }
 
-function injectResultIntoChat(result) {
-  try {
-    const ctx = SillyTavern?.getContext?.();
-    if (!ctx) return;
-
-    const toolInfo = result.toolsUsed.length > 0
-      ? `\n使用的工具: ${[...new Set(result.toolsUsed)].join(', ')}`
-      : '';
-
-    if (ctx.sendSystemMessage) {
-      ctx.sendSystemMessage('generic', `${result.text}${toolInfo ? `\n\n---\n*${toolInfo}*` : ''}`);
-    }
-  } catch (err) {
-    console.warn(`[${MODULE_NAME}] 注入聊天结果失败:`, err);
-  }
-}

@@ -87,7 +87,7 @@ function renderTopPanel(container) {
   const runBtn = el('button', 'menu_button sat-run-btn', '▶ 运行');
   runBtn.onclick = () => {
     const prompt = input.value.trim();
-    if (prompt) { input.value = ''; _runAgentFn?.(prompt); }
+    if (prompt) { input.value = ''; runAndShowResult(prompt); }
   };
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') { runBtn.click(); }
@@ -96,6 +96,150 @@ function renderTopPanel(container) {
   chatRow.appendChild(runBtn);
   chatSection.appendChild(chatRow);
   container.appendChild(chatSection);
+
+  // ── 结果显示区 ──
+  const resultSection = el('div', 'sat-top-section');
+  resultSection.id = 'sat-result-section';
+  resultSection.style.display = 'none';
+  resultSection.appendChild(el('div', 'sat-top-label', '结果'));
+
+  const resultBox = el('div', 'sat-result-box');
+  resultBox.id = 'sat-result-box';
+  resultSection.appendChild(resultBox);
+
+  const resultActions = el('div', 'sat-result-actions');
+  const saveToWbBtn = el('button', 'menu_button', '写入世界书');
+  saveToWbBtn.id = 'sat-save-to-wb';
+  saveToWbBtn.onclick = () => showSaveToWorldBookDialog();
+  const copyBtn = el('button', 'menu_button', '复制');
+  copyBtn.onclick = () => {
+    const text = document.getElementById('sat-result-box')?.textContent || '';
+    navigator.clipboard.writeText(text).then(() => toastr?.success?.('已复制', 'Agent Tools'));
+  };
+  const clearResultBtn = el('button', 'menu_button', '清除');
+  clearResultBtn.onclick = () => { resultSection.style.display = 'none'; _lastResult = null; };
+  resultActions.appendChild(saveToWbBtn);
+  resultActions.appendChild(copyBtn);
+  resultActions.appendChild(clearResultBtn);
+  resultSection.appendChild(resultActions);
+  container.appendChild(resultSection);
+}
+
+// ─── 运行并显示结果 ───
+
+let _lastResult = null;
+
+async function runAndShowResult(prompt) {
+  const result = await _runAgentFn?.(prompt);
+  if (!result?.text) return;
+
+  _lastResult = result;
+  const section = document.getElementById('sat-result-section');
+  const box = document.getElementById('sat-result-box');
+  if (section && box) {
+    box.textContent = result.text;
+    if (result.toolsUsed?.length > 0) {
+      const toolInfo = el('div', 'sat-result-tools', `工具: ${[...new Set(result.toolsUsed)].join(', ')}`);
+      box.appendChild(toolInfo);
+    }
+    section.style.display = 'block';
+  }
+}
+
+// ─── 写入世界书 ───
+
+async function showSaveToWorldBookDialog() {
+  if (!_lastResult?.text || !_stApi) {
+    toastr?.warning?.('没有可写入的结果', 'Agent Tools');
+    return;
+  }
+
+  const overlay = createOverlay();
+  const dialog = el('div', 'sat-dialog sat-dialog-wide');
+  dialog.innerHTML = `<h3>写入世界书</h3><div class="sat-loading">读取世界书列表...</div>`;
+  overlay.appendChild(dialog);
+  document.body.appendChild(overlay);
+
+  try {
+    const result = await _stApi.worldBook.list();
+    const books = result?.worldBooks || [];
+
+    dialog.innerHTML = `<h3>写入世界书</h3>`;
+
+    // 条目名称
+    dialog.appendChild(el('div', 'sat-top-label', '条目名称'));
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.className = 'text_pole';
+    nameInput.id = 'sat-wb-entry-name';
+    nameInput.placeholder = '为这条内容命名...';
+    dialog.appendChild(nameInput);
+
+    // 内容预览（可编辑）
+    dialog.appendChild(el('div', 'sat-top-label', '内容（可编辑）'));
+    const contentArea = document.createElement('textarea');
+    contentArea.className = 'text_pole';
+    contentArea.id = 'sat-wb-entry-content';
+    contentArea.style.minHeight = '100px';
+    contentArea.value = _lastResult.text;
+    dialog.appendChild(contentArea);
+
+    // 选择目标世界书
+    dialog.appendChild(el('div', 'sat-top-label', '目标世界书'));
+    if (books.length === 0) {
+      dialog.appendChild(el('p', '', '没有可用的世界书，请先创建一本。'));
+      addCancelButton(dialog, overlay);
+      return;
+    }
+
+    const select = document.createElement('select');
+    select.className = 'text_pole';
+    select.id = 'sat-wb-select';
+    for (const book of books) {
+      const opt = document.createElement('option');
+      opt.value = JSON.stringify({ name: book.name, scope: book.scope });
+      opt.textContent = `${book.name} (${book.scope})`;
+      select.appendChild(opt);
+    }
+    dialog.appendChild(select);
+
+    // 按钮
+    const actions = el('div', 'sat-dialog-actions');
+    const cancelBtn = el('button', 'menu_button', '取消');
+    cancelBtn.onclick = () => overlay.remove();
+    const saveBtn = el('button', 'menu_button', '写入');
+    saveBtn.onclick = async () => {
+      const entryName = nameInput.value.trim() || 'Agent 结果';
+      const content = contentArea.value;
+      const selected = JSON.parse(select.value);
+
+      try {
+        await _stApi.worldBook.createEntry({
+          name: selected.name,
+          scope: selected.scope,
+          entry: {
+            name: entryName,
+            content: content,
+            enabled: true,
+            activationMode: 'keyword',
+            key: [entryName],
+            position: 'beforeChar',
+            order: 100,
+          },
+        });
+        toastr?.success?.(`已写入 "${selected.name}"`, 'Agent Tools');
+        overlay.remove();
+      } catch (err) {
+        toastr?.error?.(`写入失败: ${err.message}`, 'Agent Tools');
+      }
+    };
+    actions.appendChild(cancelBtn);
+    actions.appendChild(saveBtn);
+    dialog.appendChild(actions);
+  } catch (err) {
+    dialog.innerHTML = `<h3>错误</h3><p>${escHtml(err.message)}</p>`;
+    addCancelButton(dialog, overlay);
+  }
 }
 
 // ─── 快捷操作处理 ───
@@ -107,7 +251,7 @@ async function handleQuickAction(action) {
     if (!query) return;
     prompt = prompt.replace('{query}', query);
   }
-  _runAgentFn?.(prompt);
+  runAndShowResult(prompt);
 }
 
 // ─── 上下文列表 ───
@@ -424,7 +568,6 @@ function renderSettingsPanel(container) {
   // 高级
   container.appendChild(createSection('高级设置', false, (body) => {
     body.appendChild(createNumberRow('最大工具迭代', 'maxToolCallIterations', settings.maxToolCallIterations, 1, 50));
-    body.appendChild(createCheckboxRow('结果显示到聊天', 'showInChat', settings.showInChat));
     body.appendChild(createCheckboxRow('调试日志', 'debug', settings.debug));
   }));
 

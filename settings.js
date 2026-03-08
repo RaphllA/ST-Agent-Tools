@@ -49,7 +49,6 @@ const DEFAULT_SETTINGS = Object.freeze({
 
   // 高级
   maxToolCallIterations: 10,
-  showInChat: true,
   debug: false,
 });
 
