@@ -1,0 +1,11 @@
+{
+  "display_name": "ST Agent Tools",
+  "loading_order": 50,
+  "requires": [],
+  "optional": [],
+  "js": "index.js",
+  "css": "style.css",
+  "author": "Lianues",
+  "version": "0.1.0",
+  "homePage": "https://github.com/Lianues/ST-Agent-Tools"
+}

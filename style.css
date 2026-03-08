@@ -1,0 +1,343 @@
+/* ST Agent Tools - 样式 */
+
+/* ─── 顶部操作面板 ─── */
+.sat-top-section {
+  margin-bottom: 10px;
+}
+
+.sat-top-label {
+  font-size: 0.8em;
+  color: var(--SmartThemeQuoteColor, #888);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* 快捷操作网格 */
+.sat-qa-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.sat-qa-btn {
+  font-size: 0.85em !important;
+  padding: 4px 10px !important;
+}
+
+/* 上下文列表 */
+.sat-ctx-list {
+  max-height: 150px;
+  overflow-y: auto;
+  margin-bottom: 6px;
+}
+
+.sat-ctx-empty {
+  font-size: 0.8em;
+  color: var(--SmartThemeQuoteColor, #666);
+  padding: 6px;
+  text-align: center;
+}
+
+.sat-ctx-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+.sat-ctx-item:hover {
+  background: var(--SmartThemeBlurTintColor, rgba(255, 255, 255, 0.05));
+}
+
+.sat-ctx-tag {
+  font-size: 0.7em;
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: #fff;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.sat-ctx-tag-character { background: #2196f3; }
+.sat-ctx-tag-worldbook { background: #4caf50; }
+.sat-ctx-tag-preset { background: #ff9800; }
+
+.sat-ctx-item-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--SmartThemeBodyColor, #ccc);
+}
+
+.sat-ctx-del {
+  background: none;
+  border: none;
+  color: var(--SmartThemeQuoteColor, #888);
+  cursor: pointer;
+  font-size: 1em;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+.sat-ctx-del:hover { color: #f44336; }
+
+.sat-ctx-actions {
+  display: flex;
+  gap: 4px;
+}
+
+/* 自由对话行 */
+.sat-chat-row {
+  display: flex;
+  gap: 4px;
+}
+
+.sat-chat-input {
+  flex: 1;
+}
+
+.sat-run-btn {
+  white-space: nowrap;
+}
+
+/* ─── 设置面板 ─── */
+.sat-settings-section {
+  margin: 8px 0;
+  padding: 8px;
+  border: 1px solid var(--SmartThemeBorderColor, #444);
+  border-radius: 8px;
+}
+
+.sat-settings-section h4 {
+  margin: 0 0 8px 0;
+  font-size: 1em;
+  color: var(--SmartThemeBodyColor, #ccc);
+  cursor: pointer;
+  user-select: none;
+}
+
+.sat-settings-section h4::before {
+  content: '\25B6';
+  display: inline-block;
+  margin-right: 6px;
+  font-size: 0.7em;
+  transition: transform 0.2s;
+}
+
+.sat-settings-section.expanded h4::before {
+  transform: rotate(90deg);
+}
+
+.sat-settings-section .sat-section-body {
+  display: none;
+}
+
+.sat-settings-section.expanded .sat-section-body {
+  display: block;
+}
+
+/* 表单行 */
+.sat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.sat-row label {
+  min-width: 80px;
+  font-size: 0.9em;
+  color: var(--SmartThemeBodyColor, #ccc);
+}
+
+.sat-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0;
+}
+
+.sat-checkbox-row label {
+  font-size: 0.85em;
+  color: var(--SmartThemeBodyColor, #ccc);
+  cursor: pointer;
+}
+
+/* MCP 服务器列表 */
+.sat-mcp-server-list {
+  margin: 8px 0;
+}
+
+.sat-mcp-server-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  margin: 4px 0;
+  border: 1px solid var(--SmartThemeBorderColor, #444);
+  border-radius: 6px;
+  background: var(--SmartThemeBlurTintColor, rgba(0, 0, 0, 0.2));
+}
+
+.sat-mcp-status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #666;
+  flex-shrink: 0;
+}
+
+.sat-mcp-status.connected { background: #4caf50; }
+.sat-mcp-status.error { background: #f44336; }
+
+.sat-mcp-server-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sat-mcp-server-name {
+  font-size: 0.9em;
+  font-weight: bold;
+  color: var(--SmartThemeBodyColor, #ccc);
+}
+
+.sat-mcp-server-url {
+  font-size: 0.75em;
+  color: var(--SmartThemeQuoteColor, #888);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sat-mcp-server-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* 按钮 */
+.sat-btn {
+  padding: 4px 10px;
+  border: 1px solid var(--SmartThemeBorderColor, #444);
+  border-radius: 4px;
+  background: var(--SmartThemeBlurTintColor, rgba(0, 0, 0, 0.3));
+  color: var(--SmartThemeBodyColor, #ccc);
+  cursor: pointer;
+  font-size: 0.85em;
+}
+
+.sat-btn:hover {
+  background: var(--SmartThemeBlurTintColor, rgba(255, 255, 255, 0.1));
+}
+
+.sat-btn-sm { padding: 2px 6px; font-size: 0.8em; }
+.sat-btn-danger { color: #f44336; border-color: #f44336; }
+
+/* 弹窗 */
+.sat-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sat-dialog {
+  background: var(--SmartThemeBlurTintColor, #222);
+  border: 1px solid var(--SmartThemeBorderColor, #444);
+  border-radius: 10px;
+  padding: 16px;
+  min-width: 300px;
+  max-width: 90vw;
+}
+
+.sat-dialog-wide {
+  min-width: 360px;
+  max-width: 500px;
+}
+
+.sat-dialog h3 {
+  margin: 0 0 12px 0;
+  font-size: 1em;
+  color: var(--SmartThemeBodyColor, #ccc);
+}
+
+.sat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* 来源选择按钮 */
+.sat-source-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin: 4px 0;
+}
+
+/* 滚动框 */
+.sat-scroll-box {
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 8px 0;
+  padding: 4px;
+  border: 1px solid var(--SmartThemeBorderColor, #444);
+  border-radius: 6px;
+}
+
+/* 预览文本 */
+.sat-preview {
+  font-size: 0.8em;
+  color: var(--SmartThemeQuoteColor, #888);
+  font-style: italic;
+}
+
+.sat-disabled-tag {
+  font-size: 0.75em;
+  color: #f44336;
+}
+
+/* 读取中 */
+.sat-loading {
+  text-align: center;
+  color: var(--SmartThemeQuoteColor, #888);
+  padding: 16px;
+}
+
+/* 运行指示器 */
+.sat-running-indicator {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: var(--SmartThemeBlurTintColor, rgba(0, 0, 0, 0.8));
+  border: 1px solid var(--SmartThemeBorderColor, #444);
+  border-radius: 8px;
+  color: var(--SmartThemeBodyColor, #ccc);
+  font-size: 0.85em;
+  backdrop-filter: blur(8px);
+}
+
+.sat-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--SmartThemeBorderColor, #444);
+  border-top-color: var(--SmartThemeBodyColor, #ccc);
+  border-radius: 50%;
+  animation: sat-spin 0.8s linear infinite;
+}
+
+@keyframes sat-spin {
+  to { transform: rotate(360deg); }
+}
