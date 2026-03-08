@@ -86,6 +86,7 @@
 
 .sat-ctx-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 4px;
 }
 
@@ -269,17 +270,26 @@
 
 .sat-dialog-actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   gap: 8px;
   margin-top: 12px;
 }
 
+/* 弹窗中的来源按钮容器 */
+.sat-source-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 8px 0;
+}
+
 /* 来源选择按钮 */
 .sat-source-btn {
-  display: block;
-  width: 100%;
-  text-align: left;
-  margin: 4px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px;
 }
 
 /* 滚动框 */

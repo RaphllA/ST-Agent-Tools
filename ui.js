@@ -156,6 +156,7 @@ function showContextSourceDialog(settings, listEl) {
     { type: 'preset', icon: 'fa-sliders', label: '预设条目' },
   ];
 
+  const sourceGrid = el('div', 'sat-source-grid');
   for (const opt of options) {
     const btn = el('button', 'menu_button sat-source-btn');
     btn.innerHTML = `<i class="fa-solid ${opt.icon}"></i> ${opt.label}`;
@@ -165,8 +166,9 @@ function showContextSourceDialog(settings, listEl) {
       else if (opt.type === 'worldbook') await showWorldBookPicker(settings, listEl);
       else if (opt.type === 'preset') await showPresetPicker(settings, listEl);
     };
-    dialog.appendChild(btn);
+    sourceGrid.appendChild(btn);
   }
+  dialog.appendChild(sourceGrid);
 
   addCancelButton(dialog, overlay);
   overlay.appendChild(dialog);
